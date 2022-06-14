@@ -33,6 +33,10 @@ func (r *Row) Write(value *Value) *Row {
 	return r
 }
 
+func (r Row) Every(f func(r Row) bool) bool {
+	return f(r)
+}
+
 // Record change to string slice
 func (r Row) Record() []string {
 	return r.Values

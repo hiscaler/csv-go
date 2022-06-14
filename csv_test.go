@@ -114,3 +114,34 @@ func TestTSV(t *testing.T) {
 		}
 	}
 }
+
+func TestRowEvery(t *testing.T) {
+	csv := NewCSV()
+	err := csv.Open("./testdata/test.csv", 1, 2)
+	if err != nil {
+		t.Error(err)
+	}
+
+	exists := false
+	for {
+		row, err := csv.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		exists = row.Every(func(r Row) bool {
+			age, e := r.Read(2).ToInt()
+			if e == nil && age > 20 {
+				exists = true
+				return exists
+			}
+			return false
+		})
+		if exists {
+			break
+		}
+	}
+	assert.Equal(t, true, exists, "every")
+}
