@@ -1,22 +1,22 @@
 package csv
 
 type Row struct {
-	valid  bool
-	Number int
-	Values []string
+	valid   bool
+	Number  int
+	Columns []string
 }
 
 type Rows []Row
 
-// Read reads column value in current row
-func (r Row) Read(index int) *Value {
+// Column reads column value in current row
+func (r Row) Column(index int) *Column {
 	valid := false
 	value := ""
-	if index < len(r.Values) {
-		value = r.Values[index]
+	if index < len(r.Columns) {
+		value = r.Columns[index]
 		valid = true
 	}
-	return &Value{
+	return &Column{
 		x:             r.Number,
 		y:             index,
 		valid:         valid,
@@ -26,18 +26,40 @@ func (r Row) Read(index int) *Value {
 }
 
 // Write writes column value in current row
-func (r *Row) Write(value *Value) *Row {
+func (r *Row) Write(value *Column) *Row {
 	if value.valid {
-		r.Values[value.y] = value.String()
+		r.Columns[value.y] = value.String()
 	}
 	return r
 }
 
+// Every check condition is passed for all columns value in current row
 func (r Row) Every(f func(r Row) bool) bool {
 	return f(r)
 }
 
+// Map process all columns value in current row
+func (r *Row) Map(f func(s string) string, columnIndex ...int) *Row {
+	all := len(columnIndex) == 0
+	for i, s := range r.Columns {
+		if !all {
+			next := false
+			for _, j := range columnIndex {
+				if i == j {
+					next = true
+					break
+				}
+			}
+			if !next {
+				continue
+			}
+		}
+		r.Columns[i] = f(s)
+	}
+	return r
+}
+
 // Record change to string slice
 func (r Row) Record() []string {
-	return r.Values
+	return r.Columns
 }

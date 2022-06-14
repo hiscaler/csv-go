@@ -2,45 +2,49 @@ package csv
 
 import (
 	"github.com/stretchr/testify/assert"
-	"io"
 	"log"
 	"testing"
 )
 
-func TestNewCSV(t *testing.T) {
-	csv := NewCSV()
-	err := csv.Open("./testdata/test.csv", 1, 2)
-	if err != nil {
-		t.Error(err)
-	}
+var csvInstance *CSV
 
+func TestMain(m *testing.M) {
+	csvInstance = NewCSV()
+	err := csvInstance.Open("./testdata/test.csv", 1, 2)
+	if err != nil {
+		panic(err)
+	}
+	m.Run()
+}
+
+func TestCSV(t *testing.T) {
 	for {
-		row, err := csv.Read()
-		if err == io.EOF {
+		row, isLastRow, err := csvInstance.Row()
+		if isLastRow {
 			break
 		}
 		if err != nil {
 			log.Fatal(err)
 		}
-		// Read first column data with current row, and add "A" prefix return value
-		value := row.Read(0).
+		// Column first column data with current row, and add "A" prefix return column
+		column := row.Column(0).
 			TrimSpace().
 			Do(func(s string) string {
 				return s + "A"
 			})
 		switch row.Number {
 		case 2:
-			assert.Equal(t, "oneA", value.String())
+			assert.Equal(t, "oneA", column.String())
 		case 3:
-			assert.Equal(t, "twoA", value.String())
+			assert.Equal(t, "twoA", column.String())
 		case 4:
-			assert.Equal(t, "threeA", value.String())
+			assert.Equal(t, "threeA", column.String())
 		}
 
-		value = row.Read(0).
+		column = row.Column(0).
 			TrimSpace().
 			Do(func(s string) string {
-				// change return value
+				// change return column
 				v := ""
 				switch s {
 				case "one":
@@ -55,29 +59,28 @@ func TestNewCSV(t *testing.T) {
 				return v
 			})
 		if row.Number != 1 {
-			i, _ := value.ToInt()
+			i, _ := column.ToInt()
 			assert.Equal(t, row.Number-1, i)
 		}
 	}
 }
 
 func TestTSV(t *testing.T) {
-	csv := NewCSV()
-	err := csv.Open("./testdata/test.tsv", 1, 2)
+	tsvInstance := NewCSV()
+	err := tsvInstance.Open("./testdata/test.csv", 1, 2)
 	if err != nil {
-		t.Error(err)
+		panic(err)
 	}
-
 	for {
-		row, err := csv.Read()
-		if err == io.EOF {
+		row, isLastRow, err := csvInstance.Row()
+		if isLastRow {
 			break
 		}
 		if err != nil {
 			log.Fatal(err)
 		}
-		// Read first column data with current row, and add "A" prefix return value
-		value := row.Read(0).
+		// Column first column data with current row, and add "A" prefix return value
+		value := row.Column(0).
 			TrimSpace().
 			Do(func(s string) string {
 				return s + "A"
@@ -91,7 +94,7 @@ func TestTSV(t *testing.T) {
 			assert.Equal(t, "threeA", value.String())
 		}
 
-		value = row.Read(0).
+		value = row.Column(0).
 			TrimSpace().
 			Do(func(s string) string {
 				// change return value
@@ -115,24 +118,41 @@ func TestTSV(t *testing.T) {
 	}
 }
 
-func TestRowEvery(t *testing.T) {
-	csv := NewCSV()
-	err := csv.Open("./testdata/test.csv", 1, 2)
-	if err != nil {
-		t.Error(err)
+func TestRowMap(t *testing.T) {
+	for {
+		row, isLastRow, err := csvInstance.Row()
+		if isLastRow {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		row.Map(func(s string) string {
+			return "PREFIX_" + s
+		}, 0)
+		row.Map(func(s string) string {
+			return "PREFIX_" + s
+		}, 1)
 	}
+	assert.Equal(t, "PREFIX_one", csvInstance.rows[2].Columns[0], "row.map")
+	assert.Equal(t, "PREFIX_two", csvInstance.rows[3].Columns[0], "row.map")
+	assert.Equal(t, "PREFIX_three", csvInstance.rows[4].Columns[0], "row.map")
+	assert.Equal(t, "PREFIX_A", csvInstance.rows[2].Columns[1], "row.map")
+	assert.Equal(t, "10", csvInstance.rows[2].Columns[2], "row.map")
+}
 
+func TestRowEvery(t *testing.T) {
 	exists := false
 	for {
-		row, err := csv.Read()
-		if err == io.EOF {
+		row, isLastRow, err := csvInstance.Row()
+		if isLastRow {
 			break
 		}
 		if err != nil {
 			log.Fatal(err)
 		}
 		exists = row.Every(func(r Row) bool {
-			age, e := r.Read(2).ToInt()
+			age, e := r.Column(2).ToInt()
 			if e == nil && age > 20 {
 				exists = true
 				return exists
@@ -143,5 +163,5 @@ func TestRowEvery(t *testing.T) {
 			break
 		}
 	}
-	assert.Equal(t, true, exists, "every")
+	assert.Equal(t, true, exists, "row.every")
 }

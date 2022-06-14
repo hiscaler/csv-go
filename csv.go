@@ -2,6 +2,7 @@ package csv
 
 import (
 	"encoding/csv"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -43,17 +44,18 @@ func (c *CSV) Open(filename string, headerRowNumber, dataStartRowNumber int) err
 	return nil
 }
 
-func (c *CSV) Read() (r Row, err error) {
+func (c *CSV) Row() (r Row, isLastRow bool, err error) {
 	record, err := c.reader.Read()
 	if err != nil {
+		isLastRow = err == io.EOF
 		return
 	}
 
 	c.currentRowNumber += 1
 	r = Row{
-		valid:  true,
-		Number: c.currentRowNumber,
-		Values: record,
+		valid:   true,
+		Number:  c.currentRowNumber,
+		Columns: record,
 	}
 	if c.currentRowNumber == c.headerRowNumber {
 		c.HeaderRow = record
