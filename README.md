@@ -126,3 +126,15 @@ v, err := column.ToBool("false") // get boolean value, and return false if value
 v, err := column.ToTime() // get time value
 v, err := column.ToTime("2022-01-01") // get time value, and return 2022-01-01 if value is empty
 ```
+
+**Valid column value conversion methods**
+
+- ToInt()
+- ToInt8()
+- ToInt16()
+- ToInt32()
+- ToInt64()
+- ToFloat32()
+- ToFloat64()
+- ToBool()
+- ToTime()
