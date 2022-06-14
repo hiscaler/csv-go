@@ -25,7 +25,7 @@ if err != nil {
 }
 ```
 
-### Read
+### Reads all rows
 ```go
 for {
     row, isLastRow, err := csv.Row()
@@ -74,7 +74,7 @@ for {
 }
 ```
 
-### Read a row
+### Reads a row
 ```go
 row, isLastRow, err := csv.Row()
 ```
@@ -94,7 +94,7 @@ The above code change first column value, will return "PREFIX_" and original col
 If you want change all columns value, don't pass `columnIndex` parameter value. Then all columns value will add "PREFIX_" prefix string.
 
 
-### Read column in current row
+### Reads a column in the current row
 ```go
 // Read first column in current row
 column := row.Column(0)
