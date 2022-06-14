@@ -3,6 +3,8 @@ package csv
 import (
 	"encoding/csv"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 type CSV struct {
@@ -32,6 +34,9 @@ func (c *CSV) Open(filename string, headerRowNumber, dataStartRowNumber int) err
 	}
 	c.file = f
 	c.reader = csv.NewReader(f)
+	if strings.EqualFold(filepath.Ext(filename), ".tsv") {
+		c.reader.Comma = '\t'
+	}
 	c.headerRowNumber = headerRowNumber
 	c.dataStartRowNumber = dataStartRowNumber
 	c.currentRowNumber = 0

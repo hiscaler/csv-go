@@ -1,7 +1,7 @@
 CSV For Golang
 ==============
 
-csv-go is csv file helper function
+csv-go is csv file helper function, support csv, tsv format
 
 ## Install
 
