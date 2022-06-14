@@ -38,15 +38,26 @@ func getValue(v Value, defaultValue ...string) string {
 }
 
 func (v Value) ToInt(defaultValue ...string) (int, error) {
-	return strconv.Atoi(getValue(v, defaultValue...))
+	s := getValue(v, defaultValue...)
+	if s != "" {
+		s = strings.TrimSpace(s)
+		s = strings.ReplaceAll(s, ",", "")
+	}
+
+	return strconv.Atoi(s)
 }
 
 func (v Value) ToFloat64(defaultValue ...string) (float64, error) {
-	return strconv.ParseFloat(getValue(v, defaultValue...), 64)
+	s := getValue(v, defaultValue...)
+	if s != "" {
+		s = strings.TrimSpace(s)
+		s = strings.ReplaceAll(s, ",", "")
+	}
+	return strconv.ParseFloat(s, 64)
 }
 
 func (v Value) ToBool(defaultValue ...string) (bool, error) {
-	return strconv.ParseBool(getValue(v, defaultValue...))
+	return strconv.ParseBool(strings.ToLower(getValue(v, defaultValue...)))
 }
 
 func (v Value) ToTime(layout string, loc *time.Location, defaultValue ...string) (time.Time, error) {

@@ -93,11 +93,13 @@ value.String() // get value with string
 
 // if you want to get correct value, you will check err and continue
 v, err := value.ToInt() // get int value
-v, err := value.ToInt(100) // get int value, and return 100 if value is empty
+v, err := value.ToInt("100") // get int value, and return 100 if value is empty
 v, err := value.ToFloat64() // get float value
-v, err := value.ToFloat64(100.00) // get float value, and return 100.00 if value is empty
+v, err := value.ToFloat64("100.00") // get float value, and return 100.00 if value is empty
 v, err := value.ToBool() // get boolean value
-v, err := value.ToBool(false) // get boolean value, and return false if value is empty
+v, err := value.ToBool("false") // get boolean value, and return false if value is empty
+v, err := value.ToTime() // get time value
+v, err := value.ToTime("2022-01-01") // get time value, and return 2022-01-01 if value is empty
 ```
 
 ## Notice
