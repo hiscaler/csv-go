@@ -10,13 +10,18 @@ go get github.com/hiscaler/csv-go
 ```
 
 ## Usage
+
+### Open file
 ```go
 csv := NewCSV()
 err := csv.Open("./testdata/test.csv", 1, 2)
 if err != nil {
 	t.Error(err)
 }
+```
 
+### Read
+```go
 for {
 	row, err := csv.Read()
 	if err == io.EOF {
@@ -62,6 +67,37 @@ for {
 		assert.Equal(t, row.Number-1, i)
 	}
 }
+```
+
+### Read a row
+```go
+row, err := csv.Read()
+if err == io.EOF {
+    break
+}
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Read row column
+```go
+// Read first column in current row
+value := row.Read(0)
+value.TrimSpace() // Clear spaces
+value.Do(func(s string) string {
+	// process value
+	return s
+}) // Use Do method process value
+value.String() // get value with string
+
+// if you want to get correct value, you will check err and continue
+v, err := value.ToInt() // get int value
+v, err := value.ToInt(100) // get int value, and return 100 if value is empty
+v, err := value.ToFloat64() // get float value
+v, err := value.ToFloat64(100.00) // get float value, and return 100.00 if value is empty
+v, err := value.ToBool() // get boolean value
+v, err := value.ToBool(false) // get boolean value, and return false if value is empty
 ```
 
 ## Notice
