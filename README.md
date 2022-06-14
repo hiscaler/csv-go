@@ -63,7 +63,7 @@ for {
         })
     if row.Number != 1 {
         i, _ := column.ToInt()
-		fmt.Println(i)
+        fmt.Println(i)
     }
 }
 ```
