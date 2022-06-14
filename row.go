@@ -8,6 +8,7 @@ type Row struct {
 
 type Rows []Row
 
+// Read reads column value in current row
 func (r Row) Read(index int) *Value {
 	valid := false
 	value := ""
@@ -24,6 +25,7 @@ func (r Row) Read(index int) *Value {
 	}
 }
 
+// Write writes column value in current row
 func (r *Row) Write(value *Value) *Row {
 	if value.valid {
 		r.Values[value.y] = value.String()
@@ -31,6 +33,7 @@ func (r *Row) Write(value *Value) *Row {
 	return r
 }
 
+// Record change to string slice
 func (r Row) Record() []string {
 	return r.Values
 }
