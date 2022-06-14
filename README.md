@@ -1,7 +1,9 @@
 CSV For Golang
 ==============
 
-csv-go is csv file helper function, support csv, tsv format
+csv-go is csv/tsv file helper, current supported csv, tsv format.
+
+Use it to help you process data quickly.
 
 ## Install
 
@@ -40,17 +42,9 @@ for {
         TrimSpace().
         Do(func(s string) string {
             return s + "A"
-        })
-    switch row.Number {
-    case 2:
-        assert.Equal(t, "oneA", column.String())
-    case 3:
-        assert.Equal(t, "twoA", column.String())
-    case 4:
-        assert.Equal(t, "threeA", column.String())
-    }
+        })    
 
-    column = row.Read(0).
+    column = row.Column(0).
         TrimSpace().
         Do(func(s string) string {
             // change return value
@@ -69,7 +63,7 @@ for {
         })
     if row.Number != 1 {
         i, _ := column.ToInt()
-        assert.Equal(t, row.Number-1, i)
+		fmt.Println(i)
     }
 }
 ```
@@ -93,6 +87,23 @@ The above code change first column value, will return "PREFIX_" and original col
 
 If you want change all columns value, don't pass `columnIndex` parameter value. Then all columns value will add "PREFIX_" prefix string.
 
+### Change a column value
+```go
+column := row.Column(0).TrimSpace()
+```
+Will remove the spaces on both sides
+
+or you can use Do() method perform custom processing, example:
+```go
+column := row.Column(0).Do(func(s string) string {
+    if s == "a" {
+        return "Number One"
+    } else if s == "" {
+        return "SOS"
+    }
+    return s
+})
+```
 
 ### Reads a column in the current row
 ```go
