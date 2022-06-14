@@ -123,8 +123,8 @@ v, err := column.ToFloat64() // get float value
 v, err := column.ToFloat64("100.00") // get float value, and return 100.00 if value is empty
 v, err := column.ToBool() // get boolean value
 v, err := column.ToBool("false") // get boolean value, and return false if value is empty
-v, err := column.ToTime() // get time value
-v, err := column.ToTime("2022-01-01") // get time value, and return 2022-01-01 if value is empty
+v, err := column.ToTime("2006-01-02", time.Local) // get time value
+v, err := column.ToTime("2006-01-02", time.Local, "2022-01-01") // get time value, and return 2022-01-01 if value is empty
 ```
 
 **Valid column value conversion methods**
