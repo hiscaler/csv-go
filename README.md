@@ -9,6 +9,11 @@ csv-go is csv file helper function, support csv, tsv format
 go get github.com/hiscaler/csv-go
 ```
 
+## Notices
+
+1. **Row start index is 1**
+2. **Column start index is 0**
+
 ## Usage
 
 ### Open file
@@ -74,7 +79,22 @@ for {
 row, isLastRow, err := csv.Row()
 ```
 
-### Read row column
+### Change row data
+
+If you want to fix column value in current row, you can do it：
+
+```go
+row.Map(func (s string) string {
+    return "PREFIX_" + s
+}, 0)
+```
+
+The above code change first column value, will return "PREFIX_" and original column value concatenated string.
+
+If you want change all columns value, don't pass `columnIndex` parameter value. Then all columns value will add "PREFIX_" prefix string.
+
+
+### Read column in current row
 ```go
 // Read first column in current row
 column := row.Column(0)
@@ -95,22 +115,3 @@ v, err := column.ToBool("false") // get boolean value, and return false if value
 v, err := column.ToTime() // get time value
 v, err := column.ToTime("2022-01-01") // get time value, and return 2022-01-01 if value is empty
 ```
-
-### Change row data
-
-If you want to fix column value in current row, you can do it：
-
-```go
-row.Map(func (s string) string {
-    return "PREFIX_" + s
-}, 0)
-```
-
-The above code change first column value, will return "PREFIX_" and original column value concatenated string.
-
-If you want change all columns value, don't pass `columnIndex` parameter value. Then all columns value will add "PREFIX_" prefix string.
-
-## Notices
-
-1. **row start index is 1**
-2. **column start index is 0**
