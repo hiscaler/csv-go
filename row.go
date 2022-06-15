@@ -26,9 +26,9 @@ func (r Row) Column(index int) *Column {
 }
 
 // Write writes column value in current row
-func (r *Row) Write(value *Column) *Row {
-	if value.valid {
-		r.Columns[value.y] = value.String()
+func (r *Row) Write(column *Column) *Row {
+	if column.valid {
+		r.Columns[column.y] = column.String()
 	}
 	return r
 }

@@ -80,21 +80,21 @@ func TestTSV(t *testing.T) {
 			log.Fatal(err)
 		}
 		// Column first column data with current row, and add "A" prefix return value
-		value := row.Column(0).
+		column := row.Column(0).
 			TrimSpace().
 			Do(func(s string) string {
 				return s + "A"
 			})
 		switch row.Number {
 		case 2:
-			assert.Equal(t, "oneA", value.String())
+			assert.Equal(t, "oneA", column.String())
 		case 3:
-			assert.Equal(t, "twoA", value.String())
+			assert.Equal(t, "twoA", column.String())
 		case 4:
-			assert.Equal(t, "threeA", value.String())
+			assert.Equal(t, "threeA", column.String())
 		}
 
-		value = row.Column(0).
+		column = row.Column(0).
 			TrimSpace().
 			Do(func(s string) string {
 				// change return value
@@ -112,7 +112,7 @@ func TestTSV(t *testing.T) {
 				return v
 			})
 		if row.Number != 1 {
-			i, _ := value.ToInt()
+			i, _ := column.ToInt()
 			assert.Equal(t, row.Number-1, i)
 		}
 	}
