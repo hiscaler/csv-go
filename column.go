@@ -8,11 +8,11 @@ import (
 )
 
 type Column struct {
-	x             int
-	y             int
-	valid         bool
-	OriginalValue string
-	NewValue      string
+	x             int    // Row number
+	y             int    // Column number
+	valid         bool   // Is valid column
+	OriginalValue string // Original value
+	NewValue      string // New value process after
 }
 
 func (c *Column) TrimSpace() *Column {

@@ -3,7 +3,6 @@ package csv
 import "strings"
 
 type Row struct {
-	valid   bool
 	Number  int
 	Columns []string
 }
@@ -16,19 +15,20 @@ func (r Row) IsEmpty() bool {
 
 // Column reads column value in current row
 func (r Row) Column(index int) *Column {
-	valid := false
-	value := ""
-	if index < len(r.Columns) {
-		value = r.Columns[index]
-		valid = true
-	}
-	return &Column{
+	c := &Column{
 		x:             r.Number,
 		y:             index,
-		valid:         valid,
-		OriginalValue: value,
-		NewValue:      value,
+		valid:         false,
+		OriginalValue: "",
+		NewValue:      "",
 	}
+	if index < len(r.Columns) {
+		value := r.Columns[index]
+		c.OriginalValue = value
+		c.NewValue = value
+		c.valid = true
+	}
+	return c
 }
 
 // Write writes column value in current row

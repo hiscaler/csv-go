@@ -39,6 +39,7 @@ func (c *CSV) Open(filename string) error {
 	return nil
 }
 
+// Row read one row from file
 func (c *CSV) Row() (r Row, isLastRow bool, err error) {
 	record, err := c.reader.Read()
 	if err != nil {
@@ -48,7 +49,6 @@ func (c *CSV) Row() (r Row, isLastRow bool, err error) {
 
 	c.currentRowNumber += 1
 	r = Row{
-		valid:   true,
 		Number:  c.currentRowNumber,
 		Columns: record,
 	}
