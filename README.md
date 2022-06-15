@@ -21,7 +21,7 @@ go get github.com/hiscaler/csv-go
 ### Open file
 ```go
 csv := NewCSV()
-err := csv.Open("./testdata/test.csv", 1, 2)
+err := csv.Open("./testdata/test.csv")
 if err != nil {
     t.Error(err)
 }
