@@ -16,6 +16,7 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		panic(err)
 	}
+	defer csvInstance.Close()
 	m.Run()
 }
 
@@ -73,6 +74,7 @@ func TestTSV(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
+	defer tsvInstance.Close()
 	for {
 		row, isLastRow, err := csvInstance.Row()
 		if isLastRow {

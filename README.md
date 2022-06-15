@@ -25,6 +25,7 @@ err := csv.Open("./testdata/test.csv")
 if err != nil {
     t.Error(err)
 }
+defer csv.Close()
 ```
 
 ### Reads all rows

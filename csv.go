@@ -39,6 +39,14 @@ func (c *CSV) Open(filename string) error {
 	return nil
 }
 
+// Close closes open file
+func (c CSV) Close() error {
+	if c.file == nil {
+		return nil
+	}
+	return c.file.Close()
+}
+
 // Row read one row from file
 func (c *CSV) Row() (r Row, isLastRow bool, err error) {
 	record, err := c.reader.Read()

@@ -1,5 +1,9 @@
-WooCommerce for golang Change Log
+CSV for golang Change Log
 =================================
+
+## 1.0.2 under development
+
+- New: Add csv.Close() method for close open file
 
 ## 1.0.1
 
