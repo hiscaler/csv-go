@@ -136,9 +136,9 @@ func TestRowMap(t *testing.T) {
 		row.Map(func(s string) string {
 			return prefix + s
 		}, 1)
-		assert.Equal(t, true, strings.HasPrefix(row.Columns[0], prefix), "row.map")
-		assert.Equal(t, true, strings.HasPrefix(row.Columns[1], prefix), "row.map")
-		assert.Equal(t, false, strings.HasPrefix(row.Columns[2], prefix), "row.map")
+		assert.Equal(t, true, strings.HasPrefix(row.Columns[0], prefix), "row.map1")
+		assert.Equal(t, true, strings.HasPrefix(row.Columns[1], prefix), "row.map2")
+		assert.Equal(t, false, strings.HasPrefix(row.Columns[2], prefix), "row.map3")
 	}
 }
 

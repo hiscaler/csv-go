@@ -64,8 +64,3 @@ func (r *Row) Map(f func(s string) string, columnIndex ...int) *Row {
 	}
 	return r
 }
-
-// Record change to string slice
-func (r Row) Record() []string {
-	return r.Columns
-}
