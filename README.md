@@ -23,7 +23,7 @@ go get github.com/hiscaler/csv-go
 csv := NewCSV()
 err := csv.Open("./testdata/test.csv")
 if err != nil {
-    t.Error(err)
+    panic(err)
 }
 defer csv.Close()
 ```
