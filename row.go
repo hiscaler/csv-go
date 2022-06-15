@@ -1,5 +1,7 @@
 package csv
 
+import "strings"
+
 type Row struct {
 	valid   bool
 	Number  int
@@ -7,6 +9,10 @@ type Row struct {
 }
 
 type Rows []Row
+
+func (r Row) IsEmpty() bool {
+	return strings.Join(r.Columns, "") == ""
+}
 
 // Column reads column value in current row
 func (r Row) Column(index int) *Column {

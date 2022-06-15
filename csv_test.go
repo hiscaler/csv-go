@@ -3,6 +3,7 @@ package csv
 import (
 	"github.com/stretchr/testify/assert"
 	"log"
+	"strings"
 	"testing"
 )
 
@@ -10,7 +11,7 @@ var csvInstance *CSV
 
 func TestMain(m *testing.M) {
 	csvInstance = NewCSV()
-	err := csvInstance.Open("./testdata/test.csv", 1, 2)
+	err := csvInstance.Open("./testdata/test.csv")
 	if err != nil {
 		panic(err)
 	}
@@ -67,7 +68,7 @@ func TestCSV(t *testing.T) {
 
 func TestTSV(t *testing.T) {
 	tsvInstance := NewCSV()
-	err := tsvInstance.Open("./testdata/test.csv", 1, 2)
+	err := tsvInstance.Open("./testdata/test.csv")
 	if err != nil {
 		panic(err)
 	}
@@ -119,6 +120,7 @@ func TestTSV(t *testing.T) {
 }
 
 func TestRowMap(t *testing.T) {
+	const prefix = "PREFIX_"
 	for {
 		row, isLastRow, err := csvInstance.Row()
 		if isLastRow {
@@ -128,17 +130,15 @@ func TestRowMap(t *testing.T) {
 			log.Fatal(err)
 		}
 		row.Map(func(s string) string {
-			return "PREFIX_" + s
+			return prefix + s
 		}, 0)
 		row.Map(func(s string) string {
-			return "PREFIX_" + s
+			return prefix + s
 		}, 1)
+		assert.Equal(t, true, strings.HasPrefix(row.Columns[0], prefix), "row.map")
+		assert.Equal(t, true, strings.HasPrefix(row.Columns[1], prefix), "row.map")
+		assert.Equal(t, false, strings.HasPrefix(row.Columns[2], prefix), "row.map")
 	}
-	assert.Equal(t, "PREFIX_one", csvInstance.rows[2].Columns[0], "row.map")
-	assert.Equal(t, "PREFIX_two", csvInstance.rows[3].Columns[0], "row.map")
-	assert.Equal(t, "PREFIX_three", csvInstance.rows[4].Columns[0], "row.map")
-	assert.Equal(t, "PREFIX_A", csvInstance.rows[2].Columns[1], "row.map")
-	assert.Equal(t, "10", csvInstance.rows[2].Columns[2], "row.map")
 }
 
 func TestRowEvery(t *testing.T) {

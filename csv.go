@@ -9,26 +9,23 @@ import (
 )
 
 type CSV struct {
-	file               *os.File
-	reader             *csv.Reader
-	headerRowNumber    int         // Header row number
-	dataStartRowNumber int         // Data start row number
-	currentRowNumber   int         // Current row number
-	rows               map[int]Row // All data rows
-	HeaderRow          Header      // Header row
-	DataRows           Rows        // Data rows
+	file             *os.File    // Opened file
+	reader           *csv.Reader // File reader
+	currentRowNumber int         // Current row number
 }
 
 func NewCSV() *CSV {
-	csv := &CSV{
-		rows: make(map[int]Row, 0),
-	}
-	defer csv.file.Close()
+	csv := &CSV{}
+	defer func() {
+		if csv.file != nil {
+			csv.file.Close()
+		}
+	}()
 	return csv
 }
 
 // Open opens a csv file
-func (c *CSV) Open(filename string, headerRowNumber, dataStartRowNumber int) error {
+func (c *CSV) Open(filename string) error {
 	f, err := os.Open(filename)
 	if err != nil {
 		return err
@@ -38,8 +35,6 @@ func (c *CSV) Open(filename string, headerRowNumber, dataStartRowNumber int) err
 	if strings.EqualFold(filepath.Ext(filename), ".tsv") {
 		c.reader.Comma = '\t'
 	}
-	c.headerRowNumber = headerRowNumber
-	c.dataStartRowNumber = dataStartRowNumber
 	c.currentRowNumber = 0
 	return nil
 }
@@ -57,11 +52,31 @@ func (c *CSV) Row() (r Row, isLastRow bool, err error) {
 		Number:  c.currentRowNumber,
 		Columns: record,
 	}
-	if c.currentRowNumber == c.headerRowNumber {
-		c.HeaderRow = record
-	} else {
-		c.DataRows = append(c.DataRows, r)
-	}
-	c.rows[c.currentRowNumber] = r
 	return
+}
+
+// SaveAs save as file
+func (c CSV) SaveAs(filename string, records [][]string) error {
+	dir := filepath.Dir(filename)
+	_, err := os.Stat(dir)
+	if err != nil && !os.IsExist(err) {
+		// Creates dir
+		err = os.MkdirAll(dir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	csvWriter := csv.NewWriter(f)
+	for i := range records {
+		csvWriter.Write(records[i])
+	}
+	csvWriter.Flush()
+	return csvWriter.Error()
 }
