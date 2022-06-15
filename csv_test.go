@@ -3,6 +3,7 @@ package csv
 import (
 	"github.com/stretchr/testify/assert"
 	"log"
+	"os"
 	"strings"
 	"testing"
 )
@@ -164,4 +165,31 @@ func TestRowEvery(t *testing.T) {
 		}
 	}
 	assert.Equal(t, true, exists, "row.every")
+}
+
+func TestSaveAs(t *testing.T) {
+	records := make([][]string, 0)
+	for {
+		row, isLastRow, err := csvInstance.Row()
+		if isLastRow {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		row.Map(func(s string) string {
+			if row.Number != 1 {
+				// Ignore header
+				s = "1" + s
+			}
+			return s
+		})
+		records = append(records, row.Columns)
+	}
+	err := csvInstance.SaveAs("./testdata/a/a.csv", records)
+	assert.Equal(t, nil, err, "save as")
+	if err == nil {
+		err = os.RemoveAll("./testdata/a")
+		assert.Equal(t, nil, err, "remove dir")
+	}
 }
