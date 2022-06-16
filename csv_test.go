@@ -182,7 +182,7 @@ func TestSaveAs(t *testing.T) {
 		row.Map(func(s string) string {
 			if row.Number != 1 {
 				// Ignore header
-				s = "1" + s
+				s = `1, "change"` + s
 			}
 			return s
 		})
