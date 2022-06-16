@@ -115,7 +115,7 @@ column.Do(func(s string) string {
 	// process value
 	return s
 }) // Use Do method process value
-column.String() // get value with string
+column.String() // get string value
 
 // if you want to get correct value, you will check err and continue
 v, err := column.ToInt() // get int value
