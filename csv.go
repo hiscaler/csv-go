@@ -16,11 +16,6 @@ type CSV struct {
 
 func NewCSV() *CSV {
 	csv := &CSV{}
-	defer func() {
-		if csv.file != nil {
-			csv.file.Close()
-		}
-	}()
 	return csv
 }
 
