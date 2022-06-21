@@ -37,10 +37,15 @@ func getValue(c Column, defaultValue ...string) string {
 	return s
 }
 
+// Clean number string
+// Reference: https://zhuanlan.zhihu.com/p/157980325
+// Rules:
+// 1,234 => 1234
+// 123 456 => 123456
+// Only support about two rules, if you have other rule, please use Do() method fixed the value.
 func cleanNumber(s string) string {
 	if s != "" {
-		s = strings.TrimSpace(s)
-		s = strings.ReplaceAll(s, ",", "")
+		s = strings.NewReplacer(",", "", " ", "").Replace(s)
 	}
 	return s
 }
