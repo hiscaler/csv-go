@@ -1,9 +1,9 @@
 CSV for golang Change Log
 =================================
 
-## 1.0.4
-
 ## 1.0.3
+
+## 1.0.2
 
 - New: Add csv.Close() method for close open file
 - New: Support save to TSV format
