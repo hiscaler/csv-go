@@ -22,8 +22,8 @@ func TestMain(m *testing.M) {
 
 func TestCSV(t *testing.T) {
 	for {
-		row, isLastRow, err := csvInstance.Row()
-		if isLastRow {
+		row, isEOF, err := csvInstance.Row()
+		if isEOF {
 			break
 		}
 		if err != nil {
@@ -76,8 +76,8 @@ func TestTSV(t *testing.T) {
 	}
 	defer tsvInstance.Close()
 	for {
-		row, isLastRow, err := csvInstance.Row()
-		if isLastRow {
+		row, isEOF, err := csvInstance.Row()
+		if isEOF {
 			break
 		}
 		if err != nil {
@@ -125,8 +125,8 @@ func TestTSV(t *testing.T) {
 func TestRowMap(t *testing.T) {
 	const prefix = "PREFIX_"
 	for {
-		row, isLastRow, err := csvInstance.Row()
-		if isLastRow {
+		row, isEOF, err := csvInstance.Row()
+		if isEOF {
 			break
 		}
 		if err != nil {
@@ -147,8 +147,8 @@ func TestRowMap(t *testing.T) {
 func TestRowEvery(t *testing.T) {
 	exists := false
 	for {
-		row, isLastRow, err := csvInstance.Row()
-		if isLastRow {
+		row, isEOF, err := csvInstance.Row()
+		if isEOF {
 			break
 		}
 		if err != nil {
@@ -172,8 +172,8 @@ func TestRowEvery(t *testing.T) {
 func TestSaveAs(t *testing.T) {
 	records := make([][]string, 0)
 	for {
-		row, isLastRow, err := csvInstance.Row()
-		if isLastRow {
+		row, isEOF, err := csvInstance.Row()
+		if isEOF {
 			break
 		}
 		if err != nil {

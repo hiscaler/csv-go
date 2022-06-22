@@ -31,8 +31,8 @@ defer csv.Close()
 ### Reads all rows
 ```go
 for {
-    row, isLastRow, err := csv.Row()
-    if isLastRow {
+    row, isEOF, err := csv.Row()
+    if isEOF {
         break
     }
     if err != nil {
@@ -71,7 +71,7 @@ for {
 
 ### Reads a row
 ```go
-row, isLastRow, err := csv.Row()
+row, isEOF, err := csv.Row()
 ```
 
 ### Change row data

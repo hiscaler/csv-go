@@ -48,10 +48,13 @@ func (c CSV) Close() error {
 }
 
 // Row read one row from file
-func (c *CSV) Row() (r Row, isLastRow bool, err error) {
+func (c *CSV) Row() (r Row, isEOF bool, err error) {
 	record, err := c.reader.Read()
 	if err != nil {
-		isLastRow = err == io.EOF
+		if err == io.EOF {
+			isEOF = true
+			err = nil
+		}
 		return
 	}
 
