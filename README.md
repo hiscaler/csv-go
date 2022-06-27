@@ -162,7 +162,7 @@ for {
     if err != nil {
         log.Fatal(err)
     }
-	// Do what you want to do 
+    // Do what you want to do 
     row.Map(func(s string) string {
         if row.Number != 1 {
             // Ignore header

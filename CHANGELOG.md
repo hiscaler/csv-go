@@ -2,6 +2,7 @@ CSV for golang Change Log
 =================================
 
 ## 1.0.3 under development
+
 - Chg: CSV.Row() return variable name isLastRow change to isEOF
 - Enh: If CSV.Row() isEOF return true, then err value force set to nil
 
