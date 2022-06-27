@@ -19,6 +19,7 @@ go get github.com/hiscaler/csv-go
 ## Usage
 
 ### Open file
+
 ```go
 csv := NewCSV()
 err := csv.Open("./testdata/test.csv")
@@ -29,6 +30,7 @@ defer csv.Close()
 ```
 
 ### Reads all rows
+
 ```go
 for {
     row, isEOF, err := csv.Row()
@@ -70,6 +72,7 @@ for {
 ```
 
 ### Reads a row
+
 ```go
 row, isEOF, err := csv.Row()
 ```
@@ -89,12 +92,15 @@ The above code change first column value, will return "PREFIX_" and original col
 If you want change all columns value, don't pass `columnIndex` parameter value. Then all columns value will add "PREFIX_" prefix string.
 
 ### Change a column value
+
 ```go
 column := row.Column(0).TrimSpace()
 ```
+
 Will remove the spaces on both sides
 
 or you can use Do() method perform custom processing, example:
+
 ```go
 column := row.Column(0).Do(func(s string) string {
     if s == "a" {
@@ -107,6 +113,7 @@ column := row.Column(0).Do(func(s string) string {
 ```
 
 ### Reads a column in the current row
+
 ```go
 // Read first column in current row
 column := row.Column(0)
@@ -140,3 +147,30 @@ v, err := column.ToTime("2006-01-02", time.Local, "2022-01-01") // get time valu
 - ToFloat64()
 - ToBool()
 - ToTime()
+
+### Save as
+
+SaveAs() method help you create save directory if not exists. and check you file extension save to csv/tsv format. if save have any error will return it.
+
+```go
+records := make([][]string, 0)
+for {
+    row, isEOF, err := csvInstance.Row()
+    if isEOF {
+        break
+    }
+    if err != nil {
+        log.Fatal(err)
+    }
+	// Do what you want to do 
+    row.Map(func(s string) string {
+        if row.Number != 1 {
+            // Ignore header
+            s = `1, "change"` + s
+        }
+        return s
+    })
+    records = append(records, row.Columns)
+}
+err := csvInstance.SaveAs("./a.csv", records)
+```
