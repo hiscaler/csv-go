@@ -138,6 +138,7 @@ v, err := column.ToTime("2006-01-02", time.Local, "2022-01-01") // get time valu
 **Valid column value conversion methods**
 
 - String()
+- ToBytes()
 - ToInt()
 - ToInt8()
 - ToInt16()

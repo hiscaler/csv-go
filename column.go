@@ -2,9 +2,11 @@ package csv
 
 import (
 	"errors"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
+	"unsafe"
 )
 
 type Column struct {
@@ -56,6 +58,20 @@ func (c Column) IsEmpty() bool {
 
 func (c Column) IsBlack() bool {
 	return c.NewValue == "" || strings.TrimSpace(c.NewValue) == ""
+}
+
+func (c Column) ToBytes(defaultValue ...string) []byte {
+	s := getValue(c, defaultValue...)
+	if s == "" {
+		return []byte{}
+	}
+	sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
+	bh := reflect.SliceHeader{
+		Data: sh.Data,
+		Len:  sh.Len,
+		Cap:  sh.Len,
+	}
+	return *(*[]byte)(unsafe.Pointer(&bh))
 }
 
 func (c Column) ToInt(defaultValue ...string) (int, error) {
