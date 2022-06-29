@@ -149,9 +149,11 @@ v, err := column.ToTime("2006-01-02", time.Local, "2022-01-01") // get time valu
 - ToBool()
 - ToTime()
 
-### Save as
+### Save file
 
-SaveAs() method help you create save directory if not exists. and check you file extension save to csv/tsv format. if save have any error will return it.
+SaveAs() use to save a file.
+
+This method help you create saved directory if not exists, and check you file extension save to csv/tsv format. if save have any error will return it.
 
 ```go
 records := make([][]string, 0)
