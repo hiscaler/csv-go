@@ -1,7 +1,7 @@
 CSV For Golang
 ==============
 
-![build status](https://github.com/hiscaler/csv-go/actions/workflows/build.yml/badge.svg)
+![CI status](https://github.com/hiscaler/csv-go/actions/workflows/ci.yml/badge.svg)
 
 csv-go is csv/tsv/psv file helper, current supported csv, tsv, psv format.
 
