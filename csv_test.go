@@ -1,7 +1,6 @@
 package csv
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"os"
@@ -159,7 +158,6 @@ func TestRowEvery(t *testing.T) {
 			log.Fatal(err)
 		}
 		exists = row.Every(func(r Row) bool {
-			fmt.Println("aa", r.Column(2).String())
 			age, e := r.Column(2).ToInt()
 			if e == nil && age > 20 {
 				exists = true
