@@ -19,9 +19,15 @@ func NewCSV() *CSV {
 	return csv
 }
 
-// check is TSV format by filename extension
-func isTSVFormat(filename string) bool {
-	return strings.EqualFold(filepath.Ext(filename), ".tsv")
+func fieldDelimiter(ext string) rune {
+	switch strings.ToLower(ext) {
+	case ".tsv":
+		return '\t'
+	case ".psv":
+		return '|'
+	default:
+		return ','
+	}
 }
 
 // Open opens a csv file
@@ -32,9 +38,7 @@ func (c *CSV) Open(filename string) error {
 	}
 	c.file = f
 	c.reader = csv.NewReader(f)
-	if isTSVFormat(filename) {
-		c.reader.Comma = '\t'
-	}
+	c.reader.Comma = fieldDelimiter(filepath.Ext(filename))
 	c.currentRowNumber = 0
 	return nil
 }
@@ -85,9 +89,7 @@ func (c CSV) SaveAs(filename string, records [][]string) error {
 	defer f.Close()
 
 	writer := csv.NewWriter(f)
-	if isTSVFormat(filename) {
-		writer.Comma = '\t'
-	}
+	writer.Comma = fieldDelimiter(filepath.Ext(filename))
 	for i := range records {
 		if err = writer.Write(records[i]); err != nil {
 			return err
