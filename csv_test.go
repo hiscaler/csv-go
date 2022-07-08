@@ -1,6 +1,7 @@
 package csv
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"os"
@@ -138,14 +139,17 @@ func TestRowMap(t *testing.T) {
 		row.Map(func(s string) string {
 			return prefix + s
 		}, 1)
-		assert.Equal(t, true, strings.HasPrefix(row.Columns[0], prefix), "row.map1")
-		assert.Equal(t, true, strings.HasPrefix(row.Columns[1], prefix), "row.map2")
-		assert.Equal(t, false, strings.HasPrefix(row.Columns[2], prefix), "row.map3")
+		assert.Equal(t, true, strings.HasPrefix(row.Columns[0], prefix), "row.map.column 0")
+		assert.Equal(t, true, strings.HasPrefix(row.Columns[1], prefix), "row.map.column 1")
+		assert.Equal(t, false, strings.HasPrefix(row.Columns[2], prefix), "row.map.column 2")
 	}
 }
 
 func TestRowEvery(t *testing.T) {
 	exists := false
+	err := csvInstance.Reset()
+	assert.Equal(t, nil, err, "csv.reset method")
+
 	for {
 		row, isEOF, err := csvInstance.Row()
 		if isEOF {
@@ -155,6 +159,7 @@ func TestRowEvery(t *testing.T) {
 			log.Fatal(err)
 		}
 		exists = row.Every(func(r Row) bool {
+			fmt.Println("aa", r.Column(2).String())
 			age, e := r.Column(2).ToInt()
 			if e == nil && age > 20 {
 				exists = true

@@ -2,6 +2,7 @@ package csv
 
 import (
 	"encoding/csv"
+	"errors"
 	"io"
 	"os"
 	"path/filepath"
@@ -49,6 +50,15 @@ func (c CSV) Close() error {
 		return nil
 	}
 	return c.file.Close()
+}
+
+// Reset to the file header, used to re-read the file
+func (c CSV) Reset() error {
+	if c.file == nil {
+		return errors.New("file is closed")
+	}
+	_, err := c.file.Seek(0, 0)
+	return err
 }
 
 // Row read one row from file
