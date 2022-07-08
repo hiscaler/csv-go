@@ -1,6 +1,8 @@
 CSV For Golang
 ==============
 
+![test status](https://github.com/hiscaler/csv-go/actions/workflows/build.yml/badge.svg)
+
 csv-go is csv/tsv/psv file helper, current supported csv, tsv, psv format.
 
 Use it to help you process data quickly.
