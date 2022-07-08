@@ -3,6 +3,7 @@ CSV for golang Change Log
 
 ## 1.0.4 under development
 
+- New: Add ToBytes() method for column
 - New: Add csv.Reset() method for re-read file
 
 ## 1.0.3
