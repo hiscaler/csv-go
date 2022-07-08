@@ -52,7 +52,7 @@ func (c CSV) Close() error {
 	return c.file.Close()
 }
 
-// Reset to the file header, used to re-read the file
+// Reset resets to the file header, used to re-read the file
 func (c CSV) Reset() error {
 	if c.file == nil {
 		return errors.New("file is closed")

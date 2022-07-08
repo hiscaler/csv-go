@@ -29,6 +29,14 @@ if err != nil {
 defer csv.Close()
 ```
 
+### Reset
+
+You can reset csv file, and re-read the file.
+
+```go
+csv.Reset()
+```
+
 ### Reads all rows
 
 ```go
