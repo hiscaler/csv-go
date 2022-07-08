@@ -3,6 +3,8 @@ CSV for golang Change Log
 
 ## 1.0.4 under development
 
+- New: Add csv.Reset() method for re-read file
+
 ## 1.0.3
 
 - Chg: CSV.Row() return variable name isLastRow change to isEOF
