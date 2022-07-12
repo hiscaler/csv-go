@@ -56,7 +56,7 @@ func (c Column) IsEmpty() bool {
 	return c.NewValue == ""
 }
 
-func (c Column) IsBlack() bool {
+func (c Column) IsBlank() bool {
 	return c.NewValue == "" || strings.TrimSpace(c.NewValue) == ""
 }
 
