@@ -60,6 +60,10 @@ func (c Column) IsBlank() bool {
 	return c.NewValue == "" || strings.TrimSpace(c.NewValue) == ""
 }
 
+func (c Column) IsNull() bool {
+	return strings.EqualFold(c.NewValue, "NULL")
+}
+
 func (c Column) ToBytes(defaultValue ...string) []byte {
 	s := getValue(c, defaultValue...)
 	if s == "" {

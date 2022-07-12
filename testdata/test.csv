@@ -2,3 +2,5 @@ id,name,age
 one,张三,10
 two,李四,20
 three,王五,30
+four,,40
+five,NULL,40

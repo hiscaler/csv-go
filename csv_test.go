@@ -56,6 +56,10 @@ func TestCSV(t *testing.T) {
 					v = "2"
 				case "three":
 					v = "3"
+				case "four":
+					v = "4"
+				case "five":
+					v = "5"
 				default:
 					v = ""
 				}
@@ -146,6 +150,7 @@ func TestRowMap(t *testing.T) {
 
 func TestRowEvery(t *testing.T) {
 	exists := false
+	hasNullValue := false
 	err := csvInstance.Reset()
 	assert.Equal(t, nil, err, "csv.reset method")
 
@@ -165,11 +170,12 @@ func TestRowEvery(t *testing.T) {
 			}
 			return false
 		})
-		if exists {
-			break
-		}
+		hasNullValue = row.Every(func(r Row) bool {
+			return r.Column(1).IsNull()
+		})
 	}
 	assert.Equal(t, true, exists, "row.every")
+	assert.Equal(t, true, hasNullValue, "row.every.null-check")
 }
 
 func TestSaveAs(t *testing.T) {
