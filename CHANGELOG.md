@@ -1,7 +1,12 @@
 CSV for golang Change Log
 =================================
 
-## 1.0.4 under development
+## 1.0.5 under development
+
+- Chg: IsBlack() rename to IsBlank()
+- New: Add IsNull() method for column
+
+## 1.0.4
 
 - New: Add ToBytes() method for column
 - New: Add csv.Reset() method for re-read file
