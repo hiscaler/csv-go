@@ -1,9 +1,12 @@
 CSV for golang Change Log
 =================================
 
-## 1.0.6 under development
+## 1.0.7 under development
+
+## 1.0.6
 
 - Chg: Set reader to public, user manually sets the parameters
+- Chg: Row and Column start index from 1
 
 ## 1.0.5
 
