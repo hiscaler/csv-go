@@ -9,6 +9,7 @@ import (
 	"unsafe"
 )
 
+// Column line of data in file
 type Column struct {
 	x             int    // Row number
 	y             int    // Column number
@@ -17,6 +18,7 @@ type Column struct {
 	NewValue      string // New value process after
 }
 
+// TrimSpace trim both space with original value
 func (c *Column) TrimSpace() *Column {
 	c.NewValue = strings.TrimSpace(c.OriginalValue)
 	return c

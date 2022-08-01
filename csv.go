@@ -3,6 +3,7 @@ package csv
 import (
 	"encoding/csv"
 	"errors"
+	"github.com/dimchansky/utfbom"
 	"io"
 	"os"
 	"path/filepath"
@@ -20,6 +21,7 @@ func NewCSV() *CSV {
 	return csv
 }
 
+// Get field delimiter from file extension name
 func fieldDelimiter(ext string) rune {
 	switch strings.ToLower(ext) {
 	case ".tsv":
@@ -38,7 +40,8 @@ func (c *CSV) Open(filename string) error {
 		return err
 	}
 	c.file = f
-	c.reader = csv.NewReader(f)
+	c.reader = csv.NewReader(utfbom.SkipOnly(f))
+	c.reader.FieldsPerRecord = -1
 	c.reader.Comma = fieldDelimiter(filepath.Ext(filename))
 	c.currentRowNumber = 0
 	return nil
@@ -52,16 +55,18 @@ func (c CSV) Close() error {
 	return c.file.Close()
 }
 
-// Reset resets to the file header, used to re-read the file
-func (c CSV) Reset() error {
+// Reset resets to the file header, and set new reader, used to re-read the file
+func (c *CSV) Reset() error {
 	if c.file == nil {
 		return errors.New("file is closed")
 	}
 	_, err := c.file.Seek(0, 0)
+	c.reader = csv.NewReader(utfbom.SkipOnly(c.file))
+	c.currentRowNumber = 0
 	return err
 }
 
-// Row read one row from file
+// Row read one row from opened file
 func (c *CSV) Row() (r Row, isEOF bool, err error) {
 	record, err := c.reader.Read()
 	if err != nil {

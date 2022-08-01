@@ -148,6 +148,39 @@ func TestRowMap(t *testing.T) {
 	}
 }
 
+func TestCSV_Reset(t *testing.T) {
+	csvInstance.Reset()
+	var name string
+	for {
+		row, isEOF, err := csvInstance.Row()
+		if isEOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		name = row.Column(1).String()
+		if row.Number >= 3 {
+			break
+		}
+	}
+	assert.Equal(t, "李四", name, "normal")
+
+	csvInstance.Reset()
+	for {
+		row, isEOF, err := csvInstance.Row()
+		if isEOF {
+			break
+		}
+		if err != nil {
+			t.Error(err)
+		}
+		assert.Equal(t, row.Number, 1, "reset-number")
+		assert.Equal(t, row.Column(1).String(), "name", "reset-value")
+		break
+	}
+}
+
 func TestRowEvery(t *testing.T) {
 	exists := false
 	hasNullValue := false
