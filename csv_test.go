@@ -30,7 +30,7 @@ func TestCSV(t *testing.T) {
 			log.Fatal(err)
 		}
 		// Column first column data with current row, and add "A" prefix return column
-		column := row.Column(0).
+		column := row.Column(1).
 			TrimSpace().
 			Do(func(s string) string {
 				return s + "A"
@@ -44,7 +44,7 @@ func TestCSV(t *testing.T) {
 			assert.Equal(t, "threeA", column.String())
 		}
 
-		column = row.Column(0).
+		column = row.Column(1).
 			TrimSpace().
 			Do(func(s string) string {
 				// change return column
@@ -88,7 +88,7 @@ func TestTSV(t *testing.T) {
 			log.Fatal(err)
 		}
 		// Column first column data with current row, and add "A" prefix return value
-		column := row.Column(0).
+		column := row.Column(1).
 			TrimSpace().
 			Do(func(s string) string {
 				return s + "A"
@@ -102,7 +102,7 @@ func TestTSV(t *testing.T) {
 			assert.Equal(t, "threeA", column.String())
 		}
 
-		column = row.Column(0).
+		column = row.Column(1).
 			TrimSpace().
 			Do(func(s string) string {
 				// change return value
@@ -138,10 +138,10 @@ func TestRowMap(t *testing.T) {
 		}
 		row.Map(func(s string) string {
 			return prefix + s
-		}, 0)
+		}, 1)
 		row.Map(func(s string) string {
 			return prefix + s
-		}, 1)
+		}, 2)
 		assert.Equal(t, true, strings.HasPrefix(row.Columns[0], prefix), "row.map.column 0")
 		assert.Equal(t, true, strings.HasPrefix(row.Columns[1], prefix), "row.map.column 1")
 		assert.Equal(t, false, strings.HasPrefix(row.Columns[2], prefix), "row.map.column 2")
@@ -159,7 +159,7 @@ func TestCSV_Reset(t *testing.T) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		name = row.Column(1).String()
+		name = row.Column(2).String()
 		if row.Number >= 3 {
 			break
 		}
@@ -176,7 +176,7 @@ func TestCSV_Reset(t *testing.T) {
 			t.Error(err)
 		}
 		assert.Equal(t, row.Number, 1, "reset-number")
-		assert.Equal(t, row.Column(1).String(), "name", "reset-value")
+		assert.Equal(t, row.Column(2).String(), "name", "reset-value")
 		break
 	}
 }
@@ -196,7 +196,7 @@ func TestRowEvery(t *testing.T) {
 			log.Fatal(err)
 		}
 		exists = row.Every(func(r Row) bool {
-			age, e := r.Column(2).ToInt()
+			age, e := r.Column(3).ToInt()
 			if e == nil && age > 20 {
 				exists = true
 				return exists
@@ -204,7 +204,7 @@ func TestRowEvery(t *testing.T) {
 			return false
 		})
 		hasNullValue = row.Every(func(r Row) bool {
-			return r.Column(1).IsNull()
+			return r.Column(2).IsNull()
 		})
 	}
 	assert.Equal(t, true, exists, "row.every")

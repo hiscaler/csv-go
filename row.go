@@ -13,7 +13,7 @@ func (r Row) IsEmpty() bool {
 	return strings.Join(r.Columns, "") == ""
 }
 
-// Column reads column value in current row
+// Column reads column value in current row, column index start 1
 func (r Row) Column(index int) *Column {
 	c := &Column{
 		x:             r.Number,
@@ -22,8 +22,8 @@ func (r Row) Column(index int) *Column {
 		OriginalValue: "",
 		NewValue:      "",
 	}
-	if index < len(r.Columns) {
-		value := r.Columns[index]
+	if index > 0 && index <= len(r.Columns) {
+		value := r.Columns[index-1]
 		c.OriginalValue = value
 		c.NewValue = value
 		c.valid = true
@@ -51,7 +51,7 @@ func (r *Row) Map(f func(s string) string, columnIndex ...int) *Row {
 		if !all {
 			next := false
 			for _, j := range columnIndex {
-				if i == j {
+				if i+1 == j {
 					next = true
 					break
 				}

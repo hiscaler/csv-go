@@ -15,8 +15,7 @@ go get github.com/hiscaler/csv-go
 
 ## Notices
 
-1. **Row start index is 1**
-2. **Column start index is 0**
+**Row and Column start index from 1**
 
 ## Usage
 
