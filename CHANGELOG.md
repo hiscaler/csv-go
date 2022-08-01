@@ -3,6 +3,8 @@ CSV for golang Change Log
 
 ## 1.0.7 under development
 
+- Chg: Fixed demo code error in readme file
+
 ## 1.0.6
 
 - Chg: Set reader to public, user manually sets the parameters

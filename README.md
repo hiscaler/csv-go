@@ -15,7 +15,7 @@ go get github.com/hiscaler/csv-go
 
 ## Notices
 
-**Row and Column start index from 1**
+**Row and Column start index from 1, not 0**
 
 ## Usage
 
@@ -32,11 +32,13 @@ defer csv.Close()
 
 ### Reset
 
-You can reset csv file, and re-read the file.
+You can use it reset csv file, and re-read the file. 
 
 ```go
 csv.Reset()
 ```
+
+after reset, file reader config will remain the same.
 
 ### Reads all rows
 
@@ -50,13 +52,13 @@ for {
         log.Fatal(err)
     }
     // Read first column data with current row, and add "A" prefix return value
-    column := row.Column(0).
+    column := row.Column(1).
         TrimSpace().
         Do(func(s string) string {
             return s + "A"
         })    
 
-    column = row.Column(0).
+    column = row.Column(1).
         TrimSpace().
         Do(func(s string) string {
             // change return value
@@ -93,7 +95,7 @@ If you want to fix column value in current row, you can do it：
 ```go
 row.Map(func (s string) string {
     return "PREFIX_" + s
-}, 0)
+}, 1)
 ```
 
 The above code change first column value, will return "PREFIX_" and original column value concatenated string.
@@ -103,7 +105,7 @@ If you want change all columns value, don't pass `columnIndex` parameter value. 
 ### Change a column value
 
 ```go
-column := row.Column(0).TrimSpace()
+column := row.Column(1).TrimSpace()
 ```
 
 Will remove the spaces on both sides
@@ -111,7 +113,7 @@ Will remove the spaces on both sides
 or you can use Do() method perform custom processing, example:
 
 ```go
-column := row.Column(0).Do(func(s string) string {
+column := row.Column(1).Do(func(s string) string {
     if s == "a" {
         return "Number One"
     } else if s == "" {
@@ -125,7 +127,7 @@ column := row.Column(0).Do(func(s string) string {
 
 ```go
 // Read first column in current row
-column := row.Column(0)
+column := row.Column(1)
 column.TrimSpace() // Clear spaces
 column.Do(func(s string) string {
 	// process value
