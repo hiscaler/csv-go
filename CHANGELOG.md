@@ -1,10 +1,13 @@
 CSV for golang Change Log
 =================================
 
-## 1.0.5 under development
+## 1.0.6 under development
+
+## 1.0.5
 
 - Chg: IsBlack() rename to IsBlank()
 - New: Add IsNull() method for column
+- Chg: Fixed Reset method and support BOM file
 
 ## 1.0.4
 
