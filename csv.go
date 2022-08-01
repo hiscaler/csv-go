@@ -12,8 +12,8 @@ import (
 
 type CSV struct {
 	file             *os.File    // Opened file
-	reader           *csv.Reader // File reader
 	currentRowNumber int         // Current row number
+	Reader           *csv.Reader // File Reader
 }
 
 func NewCSV() *CSV {
@@ -40,9 +40,9 @@ func (c *CSV) Open(filename string) error {
 		return err
 	}
 	c.file = f
-	c.reader = csv.NewReader(utfbom.SkipOnly(f))
-	c.reader.FieldsPerRecord = -1
-	c.reader.Comma = fieldDelimiter(filepath.Ext(filename))
+	c.Reader = csv.NewReader(utfbom.SkipOnly(f))
+	c.Reader.FieldsPerRecord = -1
+	c.Reader.Comma = fieldDelimiter(filepath.Ext(filename))
 	c.currentRowNumber = 0
 	return nil
 }
@@ -55,20 +55,27 @@ func (c CSV) Close() error {
 	return c.file.Close()
 }
 
-// Reset resets to the file header, and set new reader, used to re-read the file
+// Reset resets to the file header, and set new Reader, used to re-read the file
 func (c *CSV) Reset() error {
 	if c.file == nil {
 		return errors.New("file is closed")
 	}
 	_, err := c.file.Seek(0, 0)
-	c.reader = csv.NewReader(utfbom.SkipOnly(c.file))
+	reader := csv.NewReader(utfbom.SkipOnly(c.file))
+	reader.Comma = c.Reader.Comma
+	reader.Comment = c.Reader.Comment
+	reader.FieldsPerRecord = c.Reader.FieldsPerRecord
+	reader.LazyQuotes = c.Reader.LazyQuotes
+	reader.TrimLeadingSpace = c.Reader.TrimLeadingSpace
+	reader.ReuseRecord = c.Reader.ReuseRecord
+	c.Reader = reader
 	c.currentRowNumber = 0
 	return err
 }
 
 // Row read one row from opened file
 func (c *CSV) Row() (r Row, isEOF bool, err error) {
-	record, err := c.reader.Read()
+	record, err := c.Reader.Read()
 	if err != nil {
 		if err == io.EOF {
 			isEOF = true

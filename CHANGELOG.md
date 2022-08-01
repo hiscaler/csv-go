@@ -3,6 +3,8 @@ CSV for golang Change Log
 
 ## 1.0.6 under development
 
+- Chg: Set reader to public, user manually sets the parameters
+
 ## 1.0.5
 
 - Chg: IsBlack() rename to IsBlank()
