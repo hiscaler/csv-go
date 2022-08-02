@@ -148,6 +148,27 @@ func TestRowMap(t *testing.T) {
 	}
 }
 
+func BenchmarkRow_Map(b *testing.B) {
+	const prefix = "PREFIX_"
+	for i := 0; i < b.N; i++ {
+		for {
+			row, isEOF, err := csvInstance.Row()
+			if isEOF {
+				break
+			}
+			if err != nil {
+				log.Fatal(err)
+			}
+			row.Map(func(s string) string {
+				return prefix + s
+			}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+			row.Map(func(s string) string {
+				return prefix + s
+			}, 2)
+		}
+	}
+}
+
 func TestCSV_Reset(t *testing.T) {
 	csvInstance.Reset()
 	var name string

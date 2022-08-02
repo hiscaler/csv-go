@@ -1,6 +1,9 @@
 package csv
 
-import "strings"
+import (
+	"sort"
+	"strings"
+)
 
 type Row struct {
 	Number  int
@@ -46,21 +49,19 @@ func (r Row) Every(f func(r Row) bool) bool {
 
 // Map process all columns value in current row
 func (r *Row) Map(f func(s string) string, columnIndex ...int) *Row {
-	all := len(columnIndex) == 0
+	n := len(columnIndex)
+	if n > 1 || sort.IntsAreSorted(columnIndex) {
+		sort.Ints(columnIndex)
+	}
 	for i, s := range r.Columns {
-		if !all {
-			next := false
-			for _, j := range columnIndex {
-				if i+1 == j {
-					next = true
-					break
-				}
-			}
-			if !next {
-				continue
-			}
+		do := true
+		if n != 0 {
+			index := sort.SearchInts(columnIndex, i+1)
+			do = index < n && columnIndex[index] == i+1
 		}
-		r.Columns[i] = f(s)
+		if do {
+			r.Columns[i] = f(s)
+		}
 	}
 	return r
 }
