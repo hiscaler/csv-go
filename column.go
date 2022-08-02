@@ -9,6 +9,12 @@ import (
 	"unsafe"
 )
 
+var numberReplacer *strings.Replacer
+
+func init() {
+	numberReplacer = strings.NewReplacer(",", "", " ", "")
+}
+
 // Column line of data in file
 type Column struct {
 	x             int    // Row number
@@ -48,10 +54,10 @@ func getValue(c Column, defaultValue ...string) string {
 // 123 456 => 123456
 // Only support about two rules, if you have other rule, please use Do() method fixed the value.
 func cleanNumber(s string) string {
-	if s != "" {
-		s = strings.NewReplacer(",", "", " ", "").Replace(s)
+	if s == "" {
+		return ""
 	}
-	return s
+	return numberReplacer.Replace(s)
 }
 
 func (c Column) IsEmpty() bool {
