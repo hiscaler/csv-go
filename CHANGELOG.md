@@ -4,6 +4,7 @@ CSV for golang Change Log
 ## 1.0.7 under development
 
 - Chg: Fixed demo code error in readme file
+- Enh: Optimize Map method
 
 ## 1.0.6
 
