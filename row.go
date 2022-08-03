@@ -61,9 +61,9 @@ func (r *Row) Map(f func(s string) string, columnIndex ...int) *Row {
 		case 1:
 			do = i+1 == columnIndex[0]
 		default:
-			index := sort.SearchInts(columnIndex, i+1
+			index := sort.SearchInts(columnIndex, i+1)
 			do = index < n && columnIndex[index] == i+1
-		})
+		}
 		if do {
 			r.Columns[i] = f(s)
 		}
