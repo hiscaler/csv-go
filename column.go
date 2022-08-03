@@ -40,11 +40,12 @@ func (c Column) String() string {
 }
 
 func getValue(c Column, defaultValue ...string) string {
-	s := c.String()
-	if s == "" && len(defaultValue) > 0 {
-		s = defaultValue[0]
+	if c.NewValue != "" {
+		return c.NewValue
+	} else if len(defaultValue) > 0 {
+		return defaultValue[0]
 	}
-	return s
+	return ""
 }
 
 // Clean number string
