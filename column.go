@@ -26,12 +26,12 @@ type Column struct {
 
 // TrimSpace trim both space with original value
 func (c *Column) TrimSpace() *Column {
-	c.NewValue = strings.TrimSpace(c.OriginalValue)
+	c.NewValue = strings.TrimSpace(c.NewValue)
 	return c
 }
 
 func (c *Column) Do(f func(s string) string) *Column {
-	c.NewValue = f(c.OriginalValue)
+	c.NewValue = f(c.NewValue)
 	return c
 }
 

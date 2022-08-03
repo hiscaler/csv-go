@@ -5,6 +5,7 @@ CSV for golang Change Log
 
 - Chg: Fixed demo code error in readme file
 - Enh: Optimize Map method
+- Bug: Fixed column.TrimSpace and Do method
 
 ## 1.0.6
 

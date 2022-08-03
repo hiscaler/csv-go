@@ -60,6 +60,8 @@ func TestCSV(t *testing.T) {
 					v = "4"
 				case "five":
 					v = "5"
+				case "six":
+					v = "6"
 				default:
 					v = ""
 				}
@@ -216,17 +218,21 @@ func TestRowEvery(t *testing.T) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		exists = row.Every(func(r Row) bool {
-			age, e := r.Column(3).ToInt()
-			if e == nil && age > 20 {
-				exists = true
-				return exists
-			}
-			return false
-		})
-		hasNullValue = row.Every(func(r Row) bool {
-			return r.Column(2).IsNull()
-		})
+		if !exists {
+			exists = row.Every(func(r Row) bool {
+				age, e := r.Column(3).ToInt()
+				if e == nil && age > 20 {
+					exists = true
+					return exists
+				}
+				return false
+			})
+		}
+		if !hasNullValue {
+			hasNullValue = row.Every(func(r Row) bool {
+				return r.Column(2).IsNull()
+			})
+		}
 	}
 	assert.Equal(t, true, exists, "row.every")
 	assert.Equal(t, true, hasNullValue, "row.every.null-check")
@@ -256,5 +262,26 @@ func TestSaveAs(t *testing.T) {
 	if err == nil {
 		err = os.RemoveAll("./testdata/a")
 		assert.Equal(t, nil, err, "remove dir")
+	}
+}
+
+func TestColumn_ValueProcess(t *testing.T) {
+	csvInstance.Reset()
+	for {
+		row, isEOF, err := csvInstance.Row()
+		if isEOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if row.Number == 7 {
+			col := row.Column(2)
+			col.TrimSpace().Do(func(s string) string {
+				return s
+			})
+			assert.Equal(t, "Harry Potter", col.String(), "trimspace")
+		}
 	}
 }

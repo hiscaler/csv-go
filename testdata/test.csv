@@ -1,6 +1,8 @@
-id,name,age
-one,张三,10,a
+id,name,age,,,
+one,张三,10,a,,
 two,李四,20,a,b,c
-three,王五,30
-four,,40
-five,NULL,40
+three,王五,30,,,
+four,,40,,,
+five,NULL,40,,,
+six,"    Harry Potter
+",12,,,
