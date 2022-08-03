@@ -50,15 +50,20 @@ func (r Row) Every(f func(r Row) bool) bool {
 // Map process all columns value in current row
 func (r *Row) Map(f func(s string) string, columnIndex ...int) *Row {
 	n := len(columnIndex)
-	if n > 1 || sort.IntsAreSorted(columnIndex) {
+	if n > 1 && !sort.IntsAreSorted(columnIndex) {
 		sort.Ints(columnIndex)
 	}
 	for i, s := range r.Columns {
-		do := true
-		if n != 0 {
-			index := sort.SearchInts(columnIndex, i+1)
+		do := false
+		switch n {
+		case 0:
+			do = true
+		case 1:
+			do = i+1 == columnIndex[0]
+		default:
+			index := sort.SearchInts(columnIndex, i+1
 			do = index < n && columnIndex[index] == i+1
-		}
+		})
 		if do {
 			r.Columns[i] = f(s)
 		}
