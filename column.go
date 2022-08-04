@@ -140,5 +140,5 @@ func (c Column) ToTime(layout string, loc *time.Location, defaultValue ...string
 	if s == "" {
 		return time.Time{}, errors.New("is empty string")
 	}
-	return time.ParseInLocation(s, layout, loc)
+	return time.ParseInLocation(layout, s, loc)
 }
