@@ -17,8 +17,7 @@ type CSV struct {
 }
 
 func NewCSV() *CSV {
-	csv := &CSV{}
-	return csv
+	return &CSV{}
 }
 
 // Get field delimiter from file extension name
@@ -48,7 +47,7 @@ func (c *CSV) Open(filename string) error {
 }
 
 // Close closes open file
-func (c CSV) Close() error {
+func (c *CSV) Close() error {
 	if c.file == nil {
 		return nil
 	}
