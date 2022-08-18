@@ -7,6 +7,7 @@ CSV for golang Change Log
 - Enh: Optimize Map method
 - Bug: Fixed column.TrimSpace and Do method
 - Bug: Fixed column.ToTime time.ParseInLocation() param error
+- Chg: csv.SaveAs use WriteAll replace loop
 
 ## 1.0.6
 

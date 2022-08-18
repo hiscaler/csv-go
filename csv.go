@@ -112,11 +112,9 @@ func (c CSV) SaveAs(filename string, records [][]string) error {
 
 	writer := csv.NewWriter(f)
 	writer.Comma = fieldDelimiter(filepath.Ext(filename))
-	for i := range records {
-		if err = writer.Write(records[i]); err != nil {
-			return err
-		}
+	err = writer.WriteAll(records)
+	if err != nil {
+		return err
 	}
-	writer.Flush()
 	return writer.Error()
 }
