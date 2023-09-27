@@ -92,7 +92,7 @@ func (c *CSV) Row() (r Row, isEOF bool, err error) {
 }
 
 // SaveAs save as file
-func (c CSV) SaveAs(filename string, records [][]string) error {
+func (c *CSV) SaveAs(filename string, records [][]string) error {
 	dir := filepath.Dir(filename)
 	_, err := os.Stat(dir)
 	if err != nil && !os.IsExist(err) {

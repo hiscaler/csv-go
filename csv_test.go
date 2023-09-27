@@ -219,7 +219,7 @@ func TestRowEvery(t *testing.T) {
 			log.Fatal(err)
 		}
 		if !exists {
-			exists = row.Every(func(r Row) bool {
+			exists = row.Every(func(r *Row) bool {
 				age, e := r.Column(3).ToInt()
 				if e == nil && age > 20 {
 					exists = true
@@ -229,7 +229,7 @@ func TestRowEvery(t *testing.T) {
 			})
 		}
 		if !hasNullValue {
-			hasNullValue = row.Every(func(r Row) bool {
+			hasNullValue = row.Every(func(r *Row) bool {
 				return r.Column(2).IsNull()
 			})
 		}

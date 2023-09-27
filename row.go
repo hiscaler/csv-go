@@ -12,12 +12,12 @@ type Row struct {
 
 type Rows []Row
 
-func (r Row) IsEmpty() bool {
+func (r *Row) IsEmpty() bool {
 	return strings.Join(r.Columns, "") == ""
 }
 
 // Column reads column value in current row, column index start 1
-func (r Row) Column(index int) *Column {
+func (r *Row) Column(index int) *Column {
 	c := &Column{
 		x:             r.Number,
 		y:             index,
@@ -43,7 +43,7 @@ func (r *Row) Write(column *Column) *Row {
 }
 
 // Every check condition is passed for all columns value in current row
-func (r Row) Every(f func(r Row) bool) bool {
+func (r *Row) Every(f func(r *Row) bool) bool {
 	return f(r)
 }
 
