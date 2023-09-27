@@ -46,6 +46,45 @@ func (c *CSV) Open(filename string) error {
 	return nil
 }
 
+func (c *CSV) Find(value string, fuzzy bool) (indexes []Index, err error) {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return indexes, errors.New("csv: find value is empty")
+	}
+
+	c.Reset()
+	if fuzzy {
+		value = strings.ToLower(value)
+	}
+	for {
+		row, isEOF, e := c.Row()
+		if isEOF {
+			break
+		}
+		if e != nil {
+			err = e
+			return
+		}
+
+		maxColumns := len(row.Columns)
+		for i := 1; i <= maxColumns; i++ {
+			matched := false
+			if fuzzy {
+				matched = strings.Contains(strings.ToLower(row.Column(i).TrimSpace().String()), value)
+			} else {
+				matched = strings.EqualFold(row.Column(i).TrimSpace().String(), value)
+			}
+			if matched {
+				indexes = append(indexes, Index{
+					Row:    row.Number,
+					Column: i,
+				})
+			}
+		}
+	}
+	return
+}
+
 // Close closes open file
 func (c *CSV) Close() error {
 	if c.file == nil {

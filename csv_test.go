@@ -74,6 +74,26 @@ func TestCSV(t *testing.T) {
 	}
 }
 
+func TestCSV_Find(t *testing.T) {
+	indexes, err := csvInstance.Find("张三", false)
+	if err != nil {
+		t.Error(err)
+	} else if len(indexes) == 0 || indexes[0].Row != 2 {
+		t.Errorf("invalid position: %#v", indexes)
+	} else {
+		t.Logf("find result: %#v", indexes)
+	}
+
+	indexes, err = csvInstance.Find("李", true)
+	if err != nil {
+		t.Error(err)
+	} else if len(indexes) == 0 || indexes[0].Row != 3 {
+		t.Errorf("invalid position: %#v", indexes)
+	} else {
+		t.Logf("find result: %#v", indexes)
+	}
+}
+
 func TestTSV(t *testing.T) {
 	tsvInstance := NewCSV()
 	err := tsvInstance.Open("./testdata/test.csv")
