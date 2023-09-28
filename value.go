@@ -12,14 +12,11 @@ func (v *Value) Column(i int) *Column {
 		y:     v.Col,
 		valid: false,
 	}
-	n := len(v.Data)
-	if i <= 0 {
-		i = 1
+	if i <= 0 || i > len(v.Data) {
+		return c
 	}
-	value := ""
-	if i <= n {
-		value = v.Data[i-1]
-	}
+
+	value := v.Data[i-1]
 	c.valid = true
 	c.OriginalValue = value
 	c.NewValue = value
