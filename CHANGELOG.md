@@ -8,6 +8,10 @@ CSV for golang Change Log
 - Bug: Fixed column.TrimSpace and Do method
 - Bug: Fixed column.ToTime time.ParseInLocation() param error
 - Chg: csv.SaveAs use WriteAll replace loop
+- Chg: Use pointer method for all struct
+- New: Add Find(value, fuzzy) method
+- New: Add FindFist(), FindValue methods, and rename Find() to FindAll()
+- Enh: Error process
 
 ## 1.0.6
 
