@@ -1,7 +1,9 @@
 CSV for golang Change Log
 =================================
 
-## 1.0.7 under development
+## 1.0.8  under development
+
+## 1.0.7
 
 - Chg: Fixed demo code error in readme file
 - Enh: Optimize Map method
