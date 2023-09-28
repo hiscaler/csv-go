@@ -1,7 +1,11 @@
 CSV for golang Change Log
 =================================
 
-## 1.0.8  under development
+## 1.0.9  under development
+
+- Chg: Value.Column if invalid will return invalid Column
+
+## 1.0.8
 
 - Chg: Find value support column methods
 
