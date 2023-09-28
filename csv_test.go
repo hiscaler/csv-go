@@ -75,23 +75,42 @@ func TestCSV(t *testing.T) {
 }
 
 func TestCSV_Find(t *testing.T) {
-	indexes, err := csvInstance.Find("张三", false)
+	indexes, err := csvInstance.FindAll("张三", false)
 	if err != nil {
 		t.Error(err)
 	} else if len(indexes) == 0 || indexes[0].Row != 2 {
 		t.Errorf("invalid position: %#v", indexes)
 	} else {
-		t.Logf("find result: %#v", indexes)
+		t.Logf("FindAll result: %#v", indexes)
 	}
 
-	indexes, err = csvInstance.Find("李", true)
+	indexes, err = csvInstance.FindAll("李", true)
 	if err != nil {
 		t.Error(err)
 	} else if len(indexes) == 0 || indexes[0].Row != 3 {
 		t.Errorf("invalid position: %#v", indexes)
 	} else {
-		t.Logf("find result: %#v", indexes)
+		t.Logf("FindAll result: %#v", indexes)
 	}
+
+	index, err := csvInstance.FindFirst("40", false)
+	if err != nil {
+		t.Error(err)
+	} else if index.Row != 5 || index.Column != 3 {
+		t.Errorf("invalid position: %#v", index)
+	} else {
+		t.Logf("FindFirst result: %#v", index)
+	}
+
+	index, err = csvInstance.FindLast("40", false)
+	if err != nil {
+		t.Error(err)
+	} else if index.Row != 6 || index.Column != 3 {
+		t.Errorf("invalid position: %#v", index)
+	} else {
+		t.Logf("FindLast result: %#v", index)
+	}
+
 }
 
 func TestTSV(t *testing.T) {

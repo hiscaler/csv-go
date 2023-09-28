@@ -40,13 +40,14 @@ func (c *CSV) Open(filename string) error {
 	}
 	c.file = f
 	c.Reader = csv.NewReader(utfbom.SkipOnly(f))
-	c.Reader.FieldsPerRecord = -1
+	c.Reader.FieldsPerRecord = 0
 	c.Reader.Comma = fieldDelimiter(filepath.Ext(filename))
 	c.currentRowNumber = 0
 	return nil
 }
 
-func (c *CSV) Find(value string, fuzzy bool) (indexes []Index, err error) {
+// find Finds value by conditions and return row/column indexes
+func (c *CSV) find(value string, fuzzy, all bool) (indexes []Index, err error) {
 	value = strings.TrimSpace(value)
 	if value == "" {
 		return indexes, errors.New("csv: find value is empty")
@@ -68,18 +69,55 @@ func (c *CSV) Find(value string, fuzzy bool) (indexes []Index, err error) {
 
 		maxColumns := len(row.Columns)
 		for i := 1; i <= maxColumns; i++ {
+			v := row.Column(i).TrimSpace().String()
 			matched := false
 			if fuzzy {
-				matched = strings.Contains(strings.ToLower(row.Column(i).TrimSpace().String()), value)
+				matched = strings.Contains(strings.ToLower(v), value)
 			} else {
-				matched = strings.EqualFold(row.Column(i).TrimSpace().String(), value)
+				matched = strings.EqualFold(v, value)
 			}
 			if matched {
-				indexes = append(indexes, Index{
+				index := Index{
 					Row:    row.Number,
 					Column: i,
-				})
+				}
+				if all {
+					return []Index{index}, nil
+				}
+				indexes = append(indexes, index)
 			}
+		}
+	}
+	return
+}
+
+// FindAll Find all matched value row/column indexes
+func (c *CSV) FindAll(value string, fuzzy bool) (indexes []Index, err error) {
+	return c.find(value, fuzzy, false)
+}
+
+// FindFirst Find first matched value row/column index
+func (c *CSV) FindFirst(value string, fuzzy bool) (index Index, err error) {
+	indexes, err := c.find(value, fuzzy, true)
+	if err == nil {
+		if len(indexes) == 0 {
+			err = errors.New("not found")
+		} else {
+			index = indexes[0]
+		}
+	}
+	return
+}
+
+// FindLast Find last matched value row/column index
+func (c *CSV) FindLast(value string, fuzzy bool) (index Index, err error) {
+	indexes, err := c.find(value, fuzzy, false)
+	if err == nil {
+		n := len(indexes)
+		if n == 0 {
+			err = errors.New("not found")
+		} else {
+			index = indexes[n-1]
 		}
 	}
 	return
