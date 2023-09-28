@@ -105,7 +105,7 @@ func (c *CSV) FindFirst(s string, fuzzy bool) (value Value, err error) {
 	values, err := c.find(s, fuzzy, true)
 	if err == nil {
 		if len(values) == 0 {
-			err = errors.New("not found")
+			err = errors.New("csv: not found")
 		} else {
 			value = values[0]
 		}
@@ -119,7 +119,7 @@ func (c *CSV) FindLast(value string, fuzzy bool) (index Value, err error) {
 	if err == nil {
 		n := len(indexes)
 		if n == 0 {
-			err = errors.New("not found")
+			err = errors.New("csv: not found")
 		} else {
 			index = indexes[n-1]
 		}
@@ -138,7 +138,7 @@ func (c *CSV) Close() error {
 // Reset resets to the file header, and set new Reader, used to re-read the file
 func (c *CSV) Reset() error {
 	if c.file == nil {
-		return errors.New("file is closed")
+		return errors.New("csv: file is closed")
 	}
 	_, err := c.file.Seek(0, 0)
 	reader := csv.NewReader(utfbom.SkipOnly(c.file))

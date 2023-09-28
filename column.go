@@ -138,7 +138,7 @@ func (c *Column) ToBool(defaultValue ...string) (bool, error) {
 func (c *Column) ToTime(layout string, loc *time.Location, defaultValue ...string) (time.Time, error) {
 	s := getValue(c, defaultValue...)
 	if s == "" {
-		return time.Time{}, errors.New("is empty string")
+		return time.Time{}, errors.New("csv: is empty string")
 	}
 	return time.ParseInLocation(layout, s, loc)
 }
