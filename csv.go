@@ -53,7 +53,10 @@ func (c *CSV) find(value string, fuzzy, all bool) (indexes []Index, err error) {
 		return indexes, errors.New("csv: find value is empty")
 	}
 
-	c.Reset()
+	err = c.Reset()
+	if err != nil {
+		return
+	}
 	if fuzzy {
 		value = strings.ToLower(value)
 	}
@@ -184,7 +187,12 @@ func (c *CSV) SaveAs(filename string, records [][]string) error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer func(f *os.File) {
+		e := f.Close()
+		if e != nil {
+			return
+		}
+	}(f)
 
 	writer := csv.NewWriter(f)
 	writer.Comma = fieldDelimiter(filepath.Ext(filename))
