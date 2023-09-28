@@ -47,10 +47,10 @@ func (c *CSV) Open(filename string) error {
 }
 
 // find Finds value by conditions and return row/column indexes
-func (c *CSV) find(value string, fuzzy, all bool) (indexes []Index, err error) {
-	value = strings.TrimSpace(value)
-	if value == "" {
-		return indexes, errors.New("csv: find value is empty")
+func (c *CSV) find(s string, fuzzy, all bool) (values []Value, err error) {
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return values, errors.New("csv: find value is empty")
 	}
 
 	err = c.Reset()
@@ -58,7 +58,7 @@ func (c *CSV) find(value string, fuzzy, all bool) (indexes []Index, err error) {
 		return
 	}
 	if fuzzy {
-		value = strings.ToLower(value)
+		s = strings.ToLower(s)
 	}
 	for {
 		row, isEOF, e := c.Row()
@@ -75,19 +75,20 @@ func (c *CSV) find(value string, fuzzy, all bool) (indexes []Index, err error) {
 			v := row.Column(i).TrimSpace().String()
 			matched := false
 			if fuzzy {
-				matched = strings.Contains(strings.ToLower(v), value)
+				matched = strings.Contains(strings.ToLower(v), s)
 			} else {
-				matched = strings.EqualFold(v, value)
+				matched = strings.EqualFold(v, s)
 			}
 			if matched {
-				index := Index{
-					Row:    row.Number,
-					Column: i,
+				value := Value{
+					Row:  row.Number,
+					Col:  i,
+					Data: row.Columns,
 				}
 				if all {
-					return []Index{index}, nil
+					return []Value{value}, nil
 				}
-				indexes = append(indexes, index)
+				values = append(values, value)
 			}
 		}
 	}
@@ -95,25 +96,25 @@ func (c *CSV) find(value string, fuzzy, all bool) (indexes []Index, err error) {
 }
 
 // FindAll Find all matched value row/column indexes
-func (c *CSV) FindAll(value string, fuzzy bool) (indexes []Index, err error) {
-	return c.find(value, fuzzy, false)
+func (c *CSV) FindAll(s string, fuzzy bool) (indexes []Value, err error) {
+	return c.find(s, fuzzy, false)
 }
 
 // FindFirst Find first matched value row/column index
-func (c *CSV) FindFirst(value string, fuzzy bool) (index Index, err error) {
-	indexes, err := c.find(value, fuzzy, true)
+func (c *CSV) FindFirst(s string, fuzzy bool) (value Value, err error) {
+	values, err := c.find(s, fuzzy, true)
 	if err == nil {
-		if len(indexes) == 0 {
+		if len(values) == 0 {
 			err = errors.New("not found")
 		} else {
-			index = indexes[0]
+			value = values[0]
 		}
 	}
 	return
 }
 
 // FindLast Find last matched value row/column index
-func (c *CSV) FindLast(value string, fuzzy bool) (index Index, err error) {
+func (c *CSV) FindLast(value string, fuzzy bool) (index Value, err error) {
 	indexes, err := c.find(value, fuzzy, false)
 	if err == nil {
 		n := len(indexes)

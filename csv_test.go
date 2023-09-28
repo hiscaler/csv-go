@@ -75,40 +75,40 @@ func TestCSV(t *testing.T) {
 }
 
 func TestCSV_Find(t *testing.T) {
-	indexes, err := csvInstance.FindAll("张三", false)
+	values, err := csvInstance.FindAll("张三", false)
 	if err != nil {
-		t.Error(err)
-	} else if len(indexes) == 0 || indexes[0].Row != 2 {
-		t.Errorf("invalid position: %#v", indexes)
+		t.Errorf("FindAll error: %s", err.Error())
+	} else if len(values) == 0 || values[0].Row != 2 {
+		t.Errorf("invalid position: %#v", values)
 	} else {
-		t.Logf("FindAll result: %#v", indexes)
+		t.Logf("FindAll result: %#v", values)
 	}
 
-	indexes, err = csvInstance.FindAll("李", true)
+	values, err = csvInstance.FindAll("李", true)
 	if err != nil {
-		t.Error(err)
-	} else if len(indexes) == 0 || indexes[0].Row != 3 {
-		t.Errorf("invalid position: %#v", indexes)
+		t.Errorf("FindAll error: %s", err.Error())
+	} else if len(values) == 0 || values[0].Row != 3 {
+		t.Errorf("invalid position: %#v", values)
 	} else {
-		t.Logf("FindAll result: %#v", indexes)
+		t.Logf("FindAll result: %#v", values)
 	}
 
-	index, err := csvInstance.FindFirst("40", false)
+	value, err := csvInstance.FindFirst("40", false)
 	if err != nil {
-		t.Error(err)
-	} else if index.Row != 5 || index.Column != 3 {
-		t.Errorf("invalid position: %#v", index)
+		t.Errorf("FindFirst error: %s", err.Error())
+	} else if value.Row != 5 || value.Col != 3 || value.Column(value.Col).String() != "40" || value.Column(1).String() != "four" {
+		t.Errorf("invalid position: %#v", value)
 	} else {
-		t.Logf("FindFirst result: %#v", index)
+		t.Logf("FindFirst result: %#v", value)
 	}
 
-	index, err = csvInstance.FindLast("40", false)
+	value, err = csvInstance.FindLast("40", false)
 	if err != nil {
-		t.Error(err)
-	} else if index.Row != 6 || index.Column != 3 {
-		t.Errorf("invalid position: %#v", index)
+		t.Errorf("FindLast error: %s", err.Error())
+	} else if value.Row != 6 || value.Col != 3 || value.Column(value.Col).String() != "40" || value.Column(1).String() != "five" {
+		t.Errorf("invalid position: %#v", value)
 	} else {
-		t.Logf("FindLast result: %#v", index)
+		t.Logf("FindLast result: %#v", value)
 	}
 
 }
