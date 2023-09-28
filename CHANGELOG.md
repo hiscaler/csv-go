@@ -3,6 +3,8 @@ CSV for golang Change Log
 
 ## 1.0.8  under development
 
+- Chg: Find value support column methods
+
 ## 1.0.7
 
 - Chg: Fixed demo code error in readme file
