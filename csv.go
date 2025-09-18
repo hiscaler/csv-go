@@ -3,11 +3,12 @@ package csv
 import (
 	"encoding/csv"
 	"errors"
-	"github.com/dimchansky/utfbom"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/dimchansky/utfbom"
 )
 
 type CSV struct {
@@ -175,13 +176,8 @@ func (c *CSV) Row() (r Row, isEOF bool, err error) {
 // SaveAs save as file
 func (c *CSV) SaveAs(filename string, records [][]string) error {
 	dir := filepath.Dir(filename)
-	_, err := os.Stat(dir)
-	if err != nil && !os.IsExist(err) {
-		// Creates dir
-		err = os.MkdirAll(dir, os.ModePerm)
-		if err != nil {
-			return err
-		}
+	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+		return err
 	}
 
 	f, err := os.Create(filename)
@@ -189,16 +185,14 @@ func (c *CSV) SaveAs(filename string, records [][]string) error {
 		return err
 	}
 	defer func(f *os.File) {
-		e := f.Close()
-		if e != nil {
+		if err = f.Close(); err != nil {
 			return
 		}
 	}(f)
 
 	writer := csv.NewWriter(f)
 	writer.Comma = fieldDelimiter(filepath.Ext(filename))
-	err = writer.WriteAll(records)
-	if err != nil {
+	if err = writer.WriteAll(records); err != nil {
 		return err
 	}
 	return writer.Error()
